@@ -47,12 +47,14 @@ public class BulletOnTriggerSystem : JobComponentSystem
             if ((allPlayerBullets.Exists(entityA) && allPlayerBullets.Exists(entityB)) 
                 || (allEnemyBullets.Exists(entityA) && allEnemyBullets.Exists(entityB))) { return; }
 
-            //If playerBullet hits enemy, destroy both
+            //If playerBullet hits enemy, destroy both and spawn scoreEntity
             if ((allPlayerBullets.Exists(entityA) && allEnemies.Exists(entityB)) 
                 || (allPlayerBullets.Exists(entityB) && allEnemies.Exists(entityA)))
             {
                 ecb.DestroyEntity(entityA);
                 ecb.DestroyEntity(entityB);
+                var scoreEntity = ecb.CreateEntity();
+                ecb.AddComponent<PlayerScoreTag>(scoreEntity);
             }
 
             //If enemy or enemybullet hits player, destroy enemy/enemybullet and damage player
