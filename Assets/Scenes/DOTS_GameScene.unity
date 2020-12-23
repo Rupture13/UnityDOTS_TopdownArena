@@ -2508,7 +2508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 10
-  interval: 20
+  interval: 25
 --- !u!114 &1806227970
 MonoBehaviour:
   m_ObjectHideFlags: 0
