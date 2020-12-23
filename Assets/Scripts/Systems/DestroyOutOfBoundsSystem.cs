@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[AlwaysSynchronizeSystem]
 public class DestroyOutOfBoundsSystem : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)
@@ -13,9 +14,10 @@ public class DestroyOutOfBoundsSystem : JobComponentSystem
         EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.TempJob);
 
         Entities
-            .WithAll<DestroyOnOutOfBoundsTag>()
+            .WithAll<DestroyOnOutOfBoundsTag>() //We don't read from this component, so only checking presence
             .ForEach((Entity entity, in Translation position, in MovementData movement) => 
             {
+                //If entity is out of bounds, delete it (as buffered command)
                 if (!IsBetweenBounds(position.Value.x, movement.boundsHorizontal) 
                     || !IsBetweenBounds(position.Value.z, movement.boundsVertical))
                 {
@@ -23,6 +25,7 @@ public class DestroyOutOfBoundsSystem : JobComponentSystem
                 }
             }).Run();
 
+        //Run buffered commands and dispose of buffer
         ecb.Playback(EntityManager);
         ecb.Dispose();
 

@@ -11,11 +11,12 @@ public class MovementSystem : JobComponentSystem
     {
         float deltaTime = Time.DeltaTime;
 
-        Entities.ForEach((ref Translation location, in MovementData movement) => 
+        Entities.ForEach((ref Translation position, in MovementData movement) => 
         {
-            location.Value.x = math.clamp(location.Value.x + (movement.direction.x * movement.speed * deltaTime), 
+            //Change x and z position values with direction*speed, clamped between bounds limits
+            position.Value.x = math.clamp(position.Value.x + (movement.direction.x * movement.speed * deltaTime), 
                                         movement.boundsHorizontal.x, movement.boundsHorizontal.y);
-            location.Value.z = math.clamp(location.Value.z + (movement.direction.y * movement.speed * deltaTime),
+            position.Value.z = math.clamp(position.Value.z + (movement.direction.y * movement.speed * deltaTime),
                                         movement.boundsVertical.x, movement.boundsVertical.y);
         }).Run();
 

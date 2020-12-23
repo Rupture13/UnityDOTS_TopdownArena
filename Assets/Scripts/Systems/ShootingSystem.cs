@@ -36,7 +36,7 @@ public class ShootingSystem : JobComponentSystem
 
         }).Run();
 
-        //Execute buffered commands and dispose of buffer
+        //Run buffered commands and dispose of buffer
         ecb.Playback(EntityManager);
         ecb.Dispose();
 

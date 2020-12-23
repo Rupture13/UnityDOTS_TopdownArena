@@ -9,8 +9,6 @@ public class PlayerInputSystem : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.TempJob);
-
         Entities.ForEach((ref MovementData movement, ref ShootingData shooter, in InputData input) => 
         {
             //Set movement data based on player movement input
@@ -18,11 +16,9 @@ public class PlayerInputSystem : JobComponentSystem
             movement.direction.x += Input.GetKey(input.rightKey) ? 1 : 0;
             movement.direction.x -= Input.GetKey(input.leftKey) ? 1 : 0;
 
+            //Set shooting data based on player fire input
             shooter.canShoot = Input.GetKey(input.fireKey);
-        }).Run();
-
-        ecb.Playback(EntityManager);
-        ecb.Dispose();
+        }).Run(); //Can't schedule it due to using UnityEngine Input, which is main thread stuff
 
         return default;
     }
